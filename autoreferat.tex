@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Шаблон автореферата кандидатской диссертации                 %%%%
+%%%% Самостоятельный шаблон, не зависит от основной диссертации   %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a5paper,10pt,twoside,openany,article]{memoir}
+
+%%% Кодировка и язык %%%
+\usepackage{ifxetex}
+\ifxetex
+    \usepackage{polyglossia}
+    \setdefaultlanguage{russian}
+    \setotherlanguage{english}
+\else
+    \usepackage[T2A]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage[english,russian]{babel}
+\fi
+
+%%% Подключение пакетов и стилей %%%
+\input{packages}    % Пакеты
+\input{data}        % Основные сведения о диссертации
+\input{styles}      % Стили оформления
+\input{setup}       % Настройки
+
+%%% Гиперссылки %%%
+\usepackage{hyperref}
+\hypersetup{
+    unicode=true,
+    pdftitle={\thesisTitle},
+    pdfauthor={\thesisAuthorLastName\ \thesisAuthorOtherNames},
+    pdfsubject={Автореферат диссертации на соискание ученой степени \thesisDegree},
+    pdfcreator={LaTeX},
+    pdfproducer={pdfTeX},
+    pdfkeywords={\keywords},
+    colorlinks=true,
+    linkcolor=linkcolor,
+    citecolor=citecolor,
+    filecolor=urlcolor,
+    urlcolor=urlcolor
+}
+
+%%% Начало документа %%%
+\begin{document}
+
+%%% Титульный лист %%%
+\input{title}
+
+%%% Основное содержание %%%
+\mainmatter*
+\input{content}
+
+%%% Выходные сведения типографии %%%
+\newpage
+\thispagestyle{empty}
+\vspace*{0pt plus1fill}
+\small
+\begin{center}
+    \textit{\thesisAuthor}
+    \par\medskip
+
+    \thesisTitle
+    \par\medskip
+
+    Автореф. дис. на соискание ученой степени \thesisDegreeShort
+    \par\bigskip
+
+    Подписано в печать \rule{2em}{0.4pt}.\rule{2em}{0.4pt}.\rule{4em}{0.4pt}.
+    Заказ № \rule{5em}{0.4pt}
+
+    Формат 60\(\times\)90/16. Усл. печ. л. 1. Тираж 100 экз.
+
+    Типография \rule{0.5\linewidth}{0.4pt}
+\end{center}
+
+\end{document}

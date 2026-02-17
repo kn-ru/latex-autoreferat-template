@@ -1,0 +1,33 @@
+# Временные файлы LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Резервные копии
+*~
+*.bak
+*.backup
+
+# PDF (раскомментируйте, если не хотите коммитить PDF)
+# *.pdf
+
+# Временные папки
+tmp/
+temp/
+
+# OS-специфичные файлы
+.DS_Store
+Thumbs.db
