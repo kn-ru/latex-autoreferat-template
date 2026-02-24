@@ -1,55 +1,180 @@
-# Makefile для компиляции автореферата
+# settings precedence: command line>usercfg.mk>{windows,unix}.mk
 
-# Имя главного tex-файла (без расширения)
-TARGET = autoreferat
+# user settings
+# include before variable definitions
+ifneq ($(wildcard usercfg.mk),)
+	include usercfg.mk
+endif
 
-# Компилятор (можно изменить на xelatex или lualatex)
-LATEX = pdflatex
+# platform specific settings
+# include before variable definitions
+ifeq ($(OS),Windows_NT)
+	include windows.mk
+else
+	include unix.mk
+endif
 
-# Флаги компилятора
-LATEX_FLAGS = -interaction=nonstopmode -halt-on-error -file-line-error
+# Ghostscript-based pdf postprocessing
+include compress.mk
 
-# Основная цель - собрать PDF
-all: $(TARGET).pdf
+# Config file
+MKRC ?= latexmkrc
 
-# Правило сборки PDF
-$(TARGET).pdf: $(TARGET).tex *.tex
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
+# Source .tex file
+SOURCE ?= dissertation
 
-# Быстрая сборка (один проход)
-quick:
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
+# LaTeX compiler output .pdf file
+TARGET ?= $(SOURCE)
 
-# Полная сборка с библиографией (если будет использоваться)
-full: $(TARGET).tex *.tex
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
-	biber $(TARGET)
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
-	$(LATEX) $(LATEX_FLAGS) $(TARGET).tex
+# LaTeX version:
+# -pdf		= pdflatex
+# -pdfdvi	= pdflatex with dvi
+# -pdfps	= pdflatex with ps
+# -pdfxe	= xelatex with dvi (faster than -xelatex)
+# -xelatex	= xelatex without dvi
+# -pdflua	= lualatex with dvi  (faster than -lualatex)
+# -lualatex	= lualatex without dvi
+BACKEND ?= -pdfxe
 
-# Очистка временных файлов
+# Do not modify the section below. Edit usercfg.mk instead.
+DRAFTON ?= # 1=on;0=off
+SHOWMARKUP ?= # 1=on;0=off
+FONTFAMILY ?= # 0=CMU;1=MS fonts;2=Liberation fonts
+ALTFONT ?= # 0=Computer Modern;1=pscyr;2=XCharter
+USEBIBER ?= # 0=bibtex8;1=biber
+USEFOOTCITE ?= # 0=no;1=yes
+BIBGROUPED ?= # 0=no;1=yes
+IMGCOMPILE ?= # 1=on;0=off
+NOTESON ?= # 0=off;1=on, separate slide;2=on, same slide
+LATEXFLAGS ?= -halt-on-error -file-line-error
+LATEXMKFLAGS ?= -silent
+BIBERFLAGS ?= # --fixinits
+REGEXDIRS ?= . Dissertation Synopsis Presentation # distclean dirs
+TIMERON ?= # show CPU usage
+TIKZFILE ?= # .tikz file for tikz rule
+USEDEV ?= # use development version
+
+# Makefile options
+MAKEFLAGS := -s
+.DEFAULT_GOAL := all
+.NOTPARALLEL:
+
+export DRAFTON
+export SHOWMARKUP
+export FONTFAMILY
+export ALTFONT
+export USEBIBER
+export USEFOOTCITE
+export BIBGROUPED
+export IMGCOMPILE
+export NOTESON
+export LATEXFLAGS
+export BIBERFLAGS
+export REGEXDIRS
+export TIMERON
+export TIKZFILE
+export USEDEV
+
+##! компиляция всех файлов
+all: synopsis dissertation presentation
+
+define compile
+	latexmk -norc -r $(MKRC) $(LATEXMKFLAGS) $(BACKEND) -jobname=$(TARGET) $(SOURCE)
+endef
+
+##! компиляция диссертации
+dissertation: TARGET=dissertation
+dissertation: SOURCE=dissertation
+dissertation:
+	$(compile)
+
+##! компиляция автореферата
+synopsis: TARGET=synopsis
+synopsis: SOURCE=synopsis
+synopsis:
+	$(compile)
+
+##! компиляция презентации
+presentation: TARGET=presentation
+presentation: SOURCE=presentation
+presentation:
+	$(compile)
+
+##! компиляция черновика диссертации
+dissertation-draft: DRAFTON=1
+dissertation-draft: dissertation
+
+##! компиляция черновика автореферата
+synopsis-draft: DRAFTON=1
+synopsis-draft: synopsis
+
+##! компиляция диссертации, автореферата, и презентации при помощи pdflatex
+pdflatex: BACKEND=-pdf
+pdflatex: dissertation synopsis presentation
+
+##! компиляция черновиков всех файлов
+draft: dissertation-draft synopsis-draft
+
+##! компиляция автореферата в формате А4 для печати
+synopsis-booklet: synopsis
+synopsis-booklet: SOURCE=synopsis_booklet
+synopsis-booklet: TARGET=synopsis_booklet
+synopsis-booklet:
+	$(compile)
+
+##! компиляция презентации в формате А4 для печати
+presentation-booklet: presentation
+presentation-booklet: SOURCE=presentation_booklet
+presentation-booklet: TARGET=presentation_booklet
+presentation-booklet:
+	$(compile)
+
+##! компиляция презентации в формате А4 с комментариями для совета (раздаточный материал)
+presentation-handout: presentation
+presentation-handout: SOURCE=presentation_handout
+presentation-handout: TARGET=presentation_handout
+presentation-handout:
+	$(compile)
+
+##! компиляция tikz графики
+tikz: SOURCE=tikz
+tikz: BACKEND=-pdflua # некоторые библиотеки работают только с lualatex
+tikz: TARGET=$(basename $(notdir $(TIKZFILE)))
+tikz:
+	$(compile)
+
+##! добавление .pdf автореферата и диссертации в систему контроля версий
+release: all
+	git add dissertation.pdf
+	git add synopsis.pdf
+
+##! очистка от временных файлов цели TARGET
+clean-target:
+	latexmk -norc -r $(MKRC) -f $(LATEXMKFLAGS) $(BACKEND) -jobname=$(TARGET) -c $(SOURCE)
+
+##! полная очистка от временных файлов цели TARGET
+distclean-target:
+	latexmk -norc -r $(MKRC) -f $(LATEXMKFLAGS) $(BACKEND) -jobname=$(TARGET) -C $(SOURCE)
+
+##! очистка проекта от временных файлов
 clean:
-	rm -f *.aux *.log *.out *.toc *.bbl *.blg *.bcf *.run.xml
-	rm -f *.fls *.fdb_latexmk *.synctex.gz
+	"$(MAKE)" SOURCE=dissertation TARGET=dissertation clean-target
+	"$(MAKE)" SOURCE=synopsis TARGET=synopsis clean-target
+	"$(MAKE)" SOURCE=presentation TARGET=presentation clean-target
+	"$(MAKE)" SOURCE=presentation_booklet TARGET=presentation_booklet clean-target
+	"$(MAKE)" SOURCE=presentation_handout TARGET=presentation_handout clean-target
 
-# Полная очистка (включая PDF)
-distclean: clean
-	rm -f $(TARGET).pdf
+##! полная очистка проекта от временных файлов
+distclean:
+	"$(MAKE)" SOURCE=dissertation TARGET=dissertation distclean-target
+	"$(MAKE)" SOURCE=synopsis TARGET=synopsis distclean-target
+	"$(MAKE)" SOURCE=presentation TARGET=presentation distclean-target
+	"$(MAKE)" SOURCE=presentation_booklet TARGET=presentation_booklet distclean-target
+	"$(MAKE)" SOURCE=presentation_handout TARGET=presentation_handout distclean-target
 
-# Открыть PDF после сборки (Linux)
-view: all
-	xdg-open $(TARGET).pdf &
+# include after "all" rule
+include examples.mk
 
-# Справка
-help:
-	@echo "Доступные команды:"
-	@echo "  make          - Собрать автореферат (2 прохода)"
-	@echo "  make quick    - Быстрая сборка (1 проход)"
-	@echo "  make full     - Полная сборка с библиографией"
-	@echo "  make clean    - Удалить временные файлы"
-	@echo "  make distclean- Удалить все сгенерированные файлы"
-	@echo "  make view     - Собрать и открыть PDF"
-	@echo "  make help     - Показать эту справку"
-
-.PHONY: all quick full clean distclean view help
+.PHONY: all dissertation synopsis presentation dissertation-draft \
+synopsis-draft pdflatex draft synopsis-booklet presentation-booklet\
+tikz release clean-target distclean-target clean distclean
