@@ -1,0 +1,62 @@
+@startuml scheme-reid
+
+skinparam backgroundColor white
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #888888
+skinparam ActivityFontSize 11
+skinparam DiamondBackgroundColor #FFE066
+skinparam DiamondBorderColor #888888
+skinparam DiamondFontSize 10
+skinparam ArrowColor #555555
+skinparam DefaultFontName Arial
+skinparam Padding 3
+
+title <size:13><b>Информационные процессы ИПС реидентификации</b></size>
+
+start
+
+:Получение видеопотока
+{I₁, …, I<sub>N</sub>};
+
+:Детектирование связанных
+объектов «силуэт — лицо»
+(YOLOv8 + λ<sub>face</sub>)
+--
+B<sub>h</sub>, B<sub>f</sub>;
+
+:Трекинг объектов,
+формирование ROI;
+
+if (Доступность\nмодальностей?) then (<i>обе</i>)
+else
+  if (Только\nсилуэт?) then (<i>да</i>)
+  else (<i>лицо</i>)
+  endif
+endif
+
+fork
+  :Извлечение эмбеддинга лица
+  ViT + ArcFace
+  --
+  **f** ∈ ℝ<sup>128</sup>;
+fork again
+  :Извлечение эмбеддинга силуэта
+  ViT + ArcFace
+  --
+  **s** ∈ ℝ<sup>256</sup>;
+end fork
+
+:Байесовская интеграция
+модальностей (MAP)
+--
+y∗ = argmax<sub>y</sub> [α·log P(**f**∣y)
+  + (1−α)·log P(**s**∣y)];
+
+:Поиск в базе эмбеддингов,
+принятие решения
+--
+ID, Top-k, уверенность;
+
+stop
+
+@enduml
