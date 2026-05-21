@@ -1,0 +1,117 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Титульный лист автореферата                                  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\thispagestyle{empty}
+
+%%% Первая страница обложки %%%
+\noindent%
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+    % Место для логотипа организации (если есть)
+    \rule[0pt]{0pt}{2.5cm} & & \large{На правах рукописи}\\
+    & &
+    \ifnumequal{\value{showperssign}}{1}{%
+        % Место для подписи диссертанта (если нужна)
+        \rule[0pt]{0pt}{1.5cm}
+    }{
+        \rule[0pt]{0pt}{1.5cm}
+    }\\
+\end{tabularx}
+
+\vspace{0pt plus1fill}
+\begin{center}
+    \textbf{\large \thesisAuthor}
+\end{center}
+
+\vspace{0pt plus3fill}
+\begin{center}
+    \textbf{\Large \thesisTitle}
+
+    \vspace{0pt plus3fill}
+    {\large Специальность \thesisSpecialtyNumber\ --\par <<\thesisSpecialtyTitle>>}
+
+    \vspace{0pt plus1.5fill}
+    \Large{Автореферат}\par
+    \large{диссертации на соискание ученой степени\par \thesisDegree}
+\end{center}
+
+\vspace{0pt plus4fill}
+{\centering\thesisCity~-- \thesisYear\par}
+
+%%% Вторая страница обложки (оборот) %%%
+\newpage
+\thispagestyle{empty}
+\enlargethispage{6\baselineskip}
+
+\noindent Работа выполнена в {\thesisInOrganization}.
+
+\vspace{2pt}
+
+\noindent%
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+    Научный руководитель:   & \supervisorRegalia\par
+                              \textbf{\supervisorFio}
+                              \vspace{0.013\paperheight}\\
+    Официальные оппоненты:  &
+    \ifnumequal{\value{showopplead}}{0}{%
+        \vspace{13\onelineskip plus1fill}
+    }{%
+        \textbf{\opponentOneFio,}\par
+        \opponentOneRegalia,\par
+        \opponentOneJobPlace,\par
+        \opponentOneJobPost\par
+        \vspace{0.01\paperheight}
+        \textbf{\opponentTwoFio,}\par
+        \opponentTwoRegalia,\par
+        \opponentTwoJobPlace,\par
+        \opponentTwoJobPost
+    }%
+    \vspace{0.013\paperheight} \\
+    \ifdefined\leadingOrganizationTitle
+    Ведущая организация:    &
+    \ifnumequal{\value{showopplead}}{0}{%
+        \vspace{6\onelineskip plus1fill}
+    }{%
+        \leadingOrganizationTitle
+    }%
+    \fi
+\end{tabularx}
+
+\vspace{2pt}
+
+\noindent Защита состоится \defenseDate~на~заседании диссертационного совета \defenseCouncilNumber~при \defenseCouncilTitle~по адресу: \defenseCouncilAddress.
+
+\vspace{2pt}
+
+\noindent С диссертацией можно ознакомиться в библиотеке \synopsisLibrary.
+
+\vspace{2pt}
+
+\noindent Отзывы на автореферат в двух экземплярах, заверенные печатью учреждения, просьба направлять по адресу: \defenseCouncilAddress, ученому секретарю диссертационного совета~\defenseCouncilNumber.
+
+\vspace{2pt}
+
+\noindent{Автореферат разослан \synopsisDate.}
+
+\noindent Телефон для справок: \defenseCouncilPhone.
+
+\vspace{2pt}
+
+\noindent%
+\begin{tabularx}{\textwidth}{@{}%
+>{\raggedright\arraybackslash}b{18em}@{}
+>{\centering\arraybackslash}X
+r
+@{}}
+    Ученый секретарь\par
+    диссертационного совета\par
+    \defenseCouncilNumber,\par
+    \defenseSecretaryRegalia
+    &
+    \ifnumequal{\value{showsecrsign}}{1}{%
+        % Место для подписи секретаря (если нужна)
+        \rule[0pt]{2cm}{1cm}
+    }{}%
+    &
+    \defenseSecretaryFio
+\end{tabularx}
