@@ -1,0 +1,52 @@
+% Обобщённая блок-схема байесовской интеграции K компонентов
+\begin{tikzpicture}[
+    node distance=5mm and 6mm,
+    every node/.style={font=\small},
+    block/.style={
+        draw, rounded corners, align=center,
+        minimum height=8mm, minimum width=26mm,
+        inner sep=2pt
+    },
+    gauss/.style={
+        draw, align=center,
+        minimum height=10mm, minimum width=42mm,
+        inner sep=2pt, fill=black!3
+    },
+    arr/.style={-{Latex[length=2mm]}, thick},
+    dots/.style={font=\Large},
+]
+% Вход
+\node[block] (input) {Доступные эмбеддинги\\ $\{\mathbf{z}_k\colon k\in\mathcal{M}(t)\}$};
+
+% Гауссовы правдоподобия
+\node[gauss, below=8mm of input.south west, anchor=north west] (g1)
+    {$\log P(\mathbf{z}_1\mid y)$\\ $=-\tfrac{1}{2}\,d_{\mathrm{M}}^{2}(\mathbf{z}_1;\boldsymbol{\mu}_{y,1},\Sigma_{y,1})+c_1$};
+\node[gauss, right=6mm of g1] (g2)
+    {$\log P(\mathbf{z}_2\mid y)$\\ $=-\tfrac{1}{2}\,d_{\mathrm{M}}^{2}(\mathbf{z}_2;\boldsymbol{\mu}_{y,2},\Sigma_{y,2})+c_2$};
+\node[dots, right=4mm of g2] (gdots) {$\cdots$};
+\node[gauss, right=4mm of gdots] (gK)
+    {$\log P(\mathbf{z}_K\mid y)$\\ $=-\tfrac{1}{2}\,d_{\mathrm{M}}^{2}(\mathbf{z}_K;\boldsymbol{\mu}_{y,K},\Sigma_{y,K})+c_K$};
+
+\draw[arr] (input.south) -- ++(0,-3mm) -| (g1.north);
+\draw[arr] (input.south) -- ++(0,-3mm) -| (g2.north);
+\draw[arr] (input.south) -- ++(0,-3mm) -| (gK.north);
+
+% Сумматор
+\node[block, below=12mm of g2, minimum width=70mm] (sum)
+    {Суммирование лог-правдоподобий по~доступным компонентам\\ $\displaystyle S(y)=\sum_{k\in\mathcal{M}(t)}\log P(\mathbf{z}_k\mid y)$};
+\draw[arr] (g1.south) -- (sum.north -| g1);
+\draw[arr] (g2.south) -- (sum.north -| g2);
+\draw[arr] (gK.south) -- (sum.north -| gK);
+
+% MAP
+\node[block, below=5mm of sum, minimum width=70mm]
+    (map) {Выбор по~MAP-критерию: $y^{*}=\displaystyle\arg\max_{y\in Y}S(y)$};
+\draw[arr] (sum) -- (map);
+
+% Решение и доверие
+\node[block, below=5mm of map] (out) {Решение $y^{*}$};
+\node[block, right=8mm of out] (conf) {Уровень доверия\\ $\max_y P(y\mid\{\mathbf{z}_k\})$};
+\draw[arr] (map) -- (out);
+\draw[arr] (map.south) -| (conf.north);
+
+\end{tikzpicture}

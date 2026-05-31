@@ -1,0 +1,71 @@
+% Обобщённая схема информационных процессов ИПС
+% Многокомпонентная структура с K компонентов
+\begin{tikzpicture}[
+    node distance=4mm and 6mm,
+    every node/.style={font=\small},
+    block/.style={
+        draw, rounded corners, align=center,
+        minimum height=8mm, minimum width=24mm,
+        inner sep=2pt
+    },
+    enc/.style={
+        draw, align=center,
+        minimum height=8mm, minimum width=16mm,
+        inner sep=2pt
+    },
+    bayes/.style={
+        draw, thick, rounded corners, align=center,
+        minimum height=10mm, minimum width=58mm,
+        inner sep=2pt
+    },
+    arr/.style={-{Latex[length=2mm]}, thick},
+    dots/.style={font=\Large},
+]
+% Вход
+\node[block] (img) {Кадр~$I$ видеопотока};
+
+% Детектор
+\node[block, below=of img] (det) {Согласованный детектор\\ компонентов структуры};
+\draw[arr] (img) -- (det);
+
+% ROI
+\node[block, below=8mm of det, minimum width=66mm] (rois)
+    {ROI компонентов: $C_1,\,C_2,\,\ldots,\,C_K$};
+\draw[arr] (det) -- (rois);
+
+% Энкодеры
+\node[enc, below=8mm of rois.west, anchor=north west, xshift=2mm] (e1) {$\Phi_1$};
+\node[enc, right=4mm of e1] (e2) {$\Phi_2$};
+\node[dots, right=4mm of e2] (edots) {$\cdots$};
+\node[enc, right=4mm of edots] (eK) {$\Phi_K$};
+
+\draw[arr] ([xshift=-22mm]rois.south) -- (e1.north);
+\draw[arr] ([xshift=-8mm]rois.south) -- (e2.north);
+\draw[arr] ([xshift=14mm]rois.south) -- (eK.north);
+
+% Эмбеддинги
+\node[below=4mm of e1] (z1) {$\mathbf{z}_1$};
+\node[below=4mm of e2] (z2) {$\mathbf{z}_2$};
+\node[dots, below=4mm of edots] (zdots) {$\cdots$};
+\node[below=4mm of eK] (zK) {$\mathbf{z}_K$};
+\draw[arr] (e1) -- (z1);
+\draw[arr] (e2) -- (z2);
+\draw[arr] (eK) -- (zK);
+
+% Байес
+\node[bayes, below=8mm of zdots, fill=black!5] (bayes) {%
+    Байесовская интеграция: $\displaystyle P(y\mid\{\mathbf{z}_k\})\propto P(y)\!\!\prod_{k\in\mathcal{M}(t)}\!\!P(\mathbf{z}_k\mid y)$};
+\draw[arr] (z1) -- (bayes.north -| z1);
+\draw[arr] (z2) -- (bayes.north -| z2);
+\draw[arr] (zK) -- (bayes.north -| zK);
+
+% MAP
+\node[block, below=6mm of bayes] (map)
+    {MAP-критерий: $y^{*}=\displaystyle\arg\max_{y\in Y}\sum_{k\in\mathcal{M}(t)}\log P(\mathbf{z}_k\mid y)$};
+\draw[arr] (bayes) -- (map);
+
+% Решение
+\node[block, below=6mm of map] (out) {Решение $y^{*}$};
+\draw[arr] (map) -- (out);
+
+\end{tikzpicture}
