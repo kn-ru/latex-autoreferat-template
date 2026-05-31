@@ -1,0 +1,230 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Таблица статуса замечаний С. П. Ковалёва                     %%%%
+%%%% Сборка: xelatex kovalev_status.tex                           %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[a4paper,landscape,top=18mm,bottom=18mm,left=15mm,right=15mm]{geometry}
+
+\usepackage{fontspec}
+\setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
+\setmonofont{Liberation Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\setotherlanguage{english}
+
+\usepackage{amsmath,amssymb}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+% Цвета статусов
+\definecolor{statusDone}{HTML}{1A7F2F}
+\definecolor{statusOpen}{HTML}{B30000}
+\definecolor{statusSkip}{HTML}{888888}
+\definecolor{rowAlt}{HTML}{F5F5F5}
+
+\newcommand{\statusDone}{{\color{statusDone}\textbf{Выполнено}}}
+\newcommand{\statusSkip}{{\color{statusSkip}\textbf{Не устраняется}}}
+
+\usepackage{hyperref}
+\hypersetup{
+    unicode=true,
+    pdftitle={Статус замечаний С. П. Ковалёва},
+    pdfauthor={К. Д. Русаков},
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\setlength{\LTcapwidth}{\textwidth}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Статус замечаний С. П. Ковалёва по диссертации и автореферату}\\[6pt]
+{\large Работа: <<Комплексная методика реидентификации людей в~информационно-поисковых системах>>}\\[2pt]
+Специальность 2.3.8 <<Информатика и информационные процессы>>. Автор: Русаков~К.\,Д., ИПУ~РАН. Ветка \texttt{2.3.8}.
+\end{center}
+
+\vspace{6pt}
+
+% ============================================================
+%   РАУНД 1. БАЗОВЫЕ ПРИНЦИПЫ
+% ============================================================
+\section*{Раунд 1. Базовые принципы}
+
+\begin{longtable}{@{}p{0.025\textwidth}p{0.33\textwidth}p{0.13\textwidth}p{0.46\textwidth}@{}}
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+1 & \textbf{Глобальная абстракция.} Перевести постановку с <<реидентификации людей>> на <<распознавание сложных многокомпонентных структур по их разрозненным частям>>.
+& \statusDone
+& \texttt{Dissertation/introduction.tex}, \texttt{Synopsis/data.tex}, \texttt{Synopsis/content.tex}. Введение и общая характеристика автореферата переписаны через рамку <<многокомпонентная структура $C_1,\ldots,C_K$>>; ReID представлен как наиболее представительный частный случай. Коммит \texttt{52ec307}.\\
+\midrule
+
+2 & \textbf{Сначала формулы, потом люди.} Сперва изложить универсальный методический аппарат (детектор, ViT+ArcFace, байес+MAP) в математическом вакууме, потом конкретизировать на ReID.
+& \statusDone
+& \texttt{Dissertation/introduction.tex} (блок <<Формальная постановка задачи>> для произвольного $K$), \texttt{Dissertation/part2.tex} (параграф <<Общий случай: произвольное число компонентов>> внутри подраздела 2.2.3 до конкретизации на $K=2$). Коммит \texttt{52ec307}.\\
+\midrule
+
+3 & \textbf{Доказательство универсальности.} Подсветить опубликованные работы по смежным предметным областям (коррозия, номера, БПЛА) как подтверждение применимости метода вне ReID.
+& \statusDone
+& \texttt{Dissertation/part3.tex}: новый раздел <<Масштабируемость метода на смежные предметные области>> со ссылками на \texttt{Rusakov2021corrosion}, \texttt{Rusakov2020license}, \texttt{Rusakov2023uavspeed}, \texttt{Rusakov2024marine}, \texttt{Rusakov2021multicopter}, \texttt{Rusakov2020antispoofing}, \texttt{Rusakov2017spacecraft}. Коммит \texttt{52ec307}.\\
+\end{longtable}
+
+\vspace{4pt}
+
+% ============================================================
+%   РАУНД 1. ТЕХНИЧЕСКИЕ УТОЧНЕНИЯ
+% ============================================================
+\section*{Раунд 1. Технические уточнения}
+
+\begin{longtable}{@{}p{0.025\textwidth}p{0.33\textwidth}p{0.13\textwidth}p{0.46\textwidth}@{}}
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+a & Привести байесовскую интеграцию в соответствие с программной реализацией: убрать формулу с коэффициентом~$\alpha$, описать механизм автоматического взвешивания через ковариационные матрицы~$\Sigma_y$ (свидетельство о регистрации программы для ЭВМ № 2026617996 от 23.03.2026).
+& \statusDone
+& \texttt{Synopsis/content.tex} (параграф после MAP-критерия), \texttt{Dissertation/part2.tex}. Дополнительный гиперпараметр комбинирования удалён, явно показано, что роль коэффициентов доверия играют именно $\Sigma_{y,k}$.\\
+\midrule
+
+b & Добавить в третью главу раздел <<Масштабируемость метода>> со ссылками на работы по коррозии, номерам, БПЛА.
+& \statusDone
+& \texttt{Dissertation/part3.tex}, \texttt{\textbackslash section\{Масштабируемость метода на смежные предметные области\}}. Совпадает с пунктом 3 раунда 1.\\
+\midrule
+
+c & Добавить характеристики серверной инфраструктуры экспериментов.
+& \statusDone
+& \texttt{Dissertation/part3.tex}, \texttt{Synopsis/content.tex} (\texttt{tab:server}): Ubuntu 22.04, AMD Ryzen 9 7950X, 2$\times$NVIDIA RTX 3090 Ti, 128 ГБ ОЗУ, CUDA 12.5.\\
+\midrule
+
+d & Восстановить определения переменных в формулах.
+& \statusDone
+& Каждая основная формула в \texttt{introduction.tex}, \texttt{part2.tex}, \texttt{Synopsis/content.tex} сопровождается списком определений переменных: $\mathcal{L}_0$, $N_{\text{pred}}$, $\mathbb{I}_{\text{inner}}$, $\mathcal{L}_{\text{inner}}$, $\lambda_{\text{inner}}$, $\boldsymbol{\mu}_{y,k}$, $\Sigma_{y,k}$ и др.\\
+\midrule
+
+e & Обосновать выбор архитектуры YOLOv8 (блоки C2f, SPPF).
+& \statusDone
+& \texttt{Synopsis/content.tex} и \texttt{Dissertation/part2.tex}: явно указано на <<сбалансированное сочетание высокой скорости обработки и точности локализации за счёт эффективных блоков C2f и механизма Spatial Pyramid Pooling Fast (SPPF)>>.\\
+\midrule
+
+f & Упомянуть Акт о внедрении в ФГБУ <<НИЦ <<Институт имени Н.\,Е.\,Жуковского>>>> (сокращение времени принятия решения до~5\%).
+& \statusDone
+& \texttt{Synopsis/data.tex} (\texttt{\textbackslash probationText} и \texttt{\textbackslash influenceText}), \texttt{Dissertation/introduction.tex}, \texttt{Dissertation/conclusion.tex}. Акт от 10.06.2024, ссылки на свидетельства о регистрации программ для ЭВМ.\\
+\midrule
+
+g & Исправить оформительские пометки в списке публикаций.
+& \statusDone
+& \texttt{Synopsis/content.tex}: убраны заглушки \texttt{P.\,\_\_\_\_--\_\_\_\_} в публикациях MLSD-2024 и MLSD-2023; <<Юго-Западного Государственного университета>> $\to$ <<Юго-Западного государственного университета>> (две позиции). Коммит \texttt{6f6dd4e}.\\
+\midrule
+
+h & Унифицировать терминологию (<<многокомпонентная структура>>), оформление по ГОСТ.
+& \statusDone
+& Терминология сквозная во всех файлах. Убраны рудиментарные обороты <<топологически связанных частей объекта>>. Коммиты \texttt{52ec307}, \texttt{017a239}.\\
+\end{longtable}
+
+\vspace{4pt}
+
+% ============================================================
+%   РАУНД 2
+% ============================================================
+\section*{Раунд 2. Замечания после переработки введения}
+
+\begin{longtable}{@{}p{0.025\textwidth}p{0.33\textwidth}p{0.13\textwidth}p{0.46\textwidth}@{}}
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{№} & \textbf{Замечание} & \textbf{Статус} & \textbf{Где / комментарий}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+
+1 & Тезис о масштабируемости метода на другие предметные области не подтверждён в основном тексте.
+& \statusDone
+& \texttt{Dissertation/part3.tex}, раздел <<Масштабируемость метода на смежные предметные области>>, с подразделами по работам автора (коррозия, номера, БПЛА/мониторинг, антиспуфинг, космические аппараты).\\
+\midrule
+
+2 & Индексы \texttt{face}/<<лицо>> в формуле потерь YOLOv8 специфичны для распознавания лиц; для соответствия абстрактной постановке требуется обобщить ($\mathcal{L}_{\text{inner}}$, $\lambda_{\text{inner}}$ — <<вложенный компонент>>), интерпретация <<inner = face>> дать отдельно как частный случай.
+& \statusDone
+& Глобальная замена $\lambda_{\text{face}} \to \lambda_{\text{inner}}$, $\mathcal{L}_{\text{face}} \to \mathcal{L}_{\text{inner}}$, $\mathbb{I}_{\text{face}} \to \mathbb{I}_{\text{inner}}$ во всех \texttt{.tex}. В алгоритме \texttt{BboxLoss} (part3.tex) переименованы \texttt{lambda\_face/loss\_face/face\_iou/face\_mask} $\to$ \texttt{..\_inner}. Конкретные обозначения ($\Phi_{\text{face}}$, $\mathrm{ROI}_{\text{face}}$) оставлены только там, где речь именно о лицевой модальности как одной из двух частей в~случае~$K=2$. Коммит \texttt{52ec307}.\\
+\midrule
+
+3 & Все схемы процессов и алгоритмов содержат специфику ReID; нужен обобщённый вариант для произвольного $K$.
+& \statusDone
+& Созданы TikZ-схемы \texttt{Synopsis/images/scheme-ipc-generic.tikz} и \texttt{Synopsis/images/scheme-bayes-generic.tikz} (с дубликатами в \texttt{Dissertation/images/}). Включены рядом с растровыми \texttt{images/1.png} и \texttt{images/3.png}. Подписи существующих растровых рисунков переведены в формат <<Частный случай ($K=2$): силуэт-лицо>>. Коммит \texttt{017a239}.\\
+\midrule
+
+4 & Байесовская модель в гл. 2 описана для пары $(\mathbf{f},\mathbf{s})$; абстрактный многокомпонентный случай $\{\mathbf{z}_k\colon k\in\mathcal{M}(t)\}$ во введении дан, но в основном тексте не раскрыт.
+& \statusDone
+& \texttt{Dissertation/part2.tex}, подраздел 2.2.3 <<Байесовская модель интеграции>>: параграф <<Общий случай: произвольное число компонентов структуры>> с уравнениями \texttt{eq:ch2/bayes-generic}, \texttt{..../bayes-factor-generic}, \texttt{..../map-generic}, \texttt{..../gauss-generic}; затем конкретизация на $K=2$. Коммит \texttt{52ec307}.\\
+\midrule
+
+5 & Пункт 3 научной новизны об абстрактном методе интеграции не раскрыт в гл. 2.
+& \statusDone
+& Тот же параграф <<Общий случай>> в подразделе 2.2.3 раскрывает абстрактный метод интеграции для произвольного $K$ и явно соединяет его с положением 3 на защиту. Коммит \texttt{52ec307}.\\
+\midrule
+
+6 & Название работы <<Комплексная методика реидентификации людей в~ИПС>> расходится с продекларированной абстрактной постановкой; рекомендована переформулировка (<<Методика распознавания многокомпонентных структур в~ИПС (на примере реидентификации людей)>>).
+& \statusSkip
+& \textbf{Не устраняется.} Тема диссертации зафиксирована на этапе её утверждения учёным советом и далее изменению не подлежит. Сохраняется исходная формулировка. Расхождение компенсируется тем, что во введении и в~автореферате прямо указано: <<ReID рассматривается как наиболее представительный частный случай распознавания многокомпонентных структур>>, а в~гл.~2 (общий случай~$K$) и~гл.~3 (раздел масштабируемости) развёрнут универсальный аппарат. Коммит \texttt{8f5c2e1}.\\
+\midrule
+
+7 & Термин <<множество идентичностей>> режет ухо; заменить на <<множество классов идентификации>>~/ <<множество личностей>> по контексту.
+& \statusDone
+& Заменено во всех файлах (около 16 вхождений): \texttt{Synopsis/content.tex}, \texttt{Dissertation/introduction.tex}, \texttt{Dissertation/part2.tex}. Используется <<множество классов идентификации>>~/ <<личностей>>~/ <<классов>> по контексту. Коммит \texttt{017a239}.\\
+\end{longtable}
+
+\vspace{6pt}
+
+% ============================================================
+%   СВОДКА
+% ============================================================
+\section*{Сводка}
+
+\begin{center}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Категория} & \textbf{Всего} & \textbf{Выполнено} & \textbf{Не устраняется}\\
+\midrule
+Раунд 1, базовые        & 3  & 3  & 0\\
+Раунд 1, технические    & 8  & 8  & 0\\
+Раунд 2                 & 7  & 6  & 1\\
+\midrule
+\textbf{Итого}          & \textbf{18} & \textbf{17} & \textbf{1}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+
+\noindent\textbf{Единственный неустранённый пункт} — замечание раунда 2, № 6, о переименовании работы. Тема диссертации утверждена в учёном совете, изменение названия после утверждения невозможно. Семантическое расхождение между названием и рамкой <<многокомпонентные структуры>> компенсируется явной формулировкой во введении и в автореферате о том, что задача реидентификации людей выступает как наиболее представительный частный случай предлагаемой методики.
+
+\end{document}
