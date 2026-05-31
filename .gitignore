@@ -32,6 +32,6 @@ temp/
 .DS_Store
 Thumbs.db
 
-# Claude Code настройки
-CLAUDE.md
+# Claude Code: настройки сессии не коммитим, но CLAUDE.md (описание
+# проекта для новых чатов) держим в репозитории
 .claude/
