@@ -610,10 +610,17 @@ $P(y^*\mid\mathbf{f},\mathbf{s})$ низок, система может возд
 дополнительный образ). Ниже приведен алгоритм байесовской
 идентификации.
 
-\begin{tabular}{p{0.95\textwidth}}
+\begin{longtable}{@{}p{0.97\textwidth}@{}}
 \hline
 \textbf{Алгоритм байесовской идентификации.}\\
 \hline
+\endfirsthead
+\hline
+\textbf{Алгоритм байесовской идентификации} (продолжение):\\
+\hline
+\endhead
+\hline
+\endfoot
 \textbf{Вход:} изображение с~лицом и~фигурой человека.\\
 \textbf{Шаг 1. Извлечение признаков:}\\
 ~~$\mathbf{f}:=\text{Embedder}_{\text{face}}(\text{изображение лица})$;\\
@@ -628,8 +635,7 @@ $P(y^*\mid\mathbf{f},\mathbf{s})$ низок, система может возд
 ~~$y^*:=\arg\max_{y\in Y} p(y)$;\\
 ~~вывести $y^*$ как опознанную личность;\\
 ~~при необходимости вывести $p(y^*)$ как степень уверенности.\\
-\hline
-\end{tabular}
+\end{longtable}
 
 \subsection{Архитектура кодировщиков}\label{sec:ch2/encoders}
 

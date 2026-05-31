@@ -178,16 +178,22 @@ $(x_{\text{center}},y_{\text{center}},w,h)$, нормированному
 содержит слагаемое, зависящее от~$\lambda_{\text{inner}}$, что
 позволяет регулировать вклад компонента лиц в~общую ошибку.
 
-\begin{tabular}{p{0.95\textwidth}}
+\begin{longtable}{@{}p{0.97\textwidth}@{}}
 \hline
 \textbf{Алгоритм \texttt{BboxLoss}}(\texttt{reg\_max}, \texttt{use\_dfl}, \texttt{lambda\_inner}):\\
 \hline
+\endfirsthead
+\hline
+\textbf{Алгоритм \texttt{BboxLoss}} (продолжение):\\
+\hline
+\endhead
+\hline
+\endfoot
 1. Инициализация параметров:\\
 ~~~--- \texttt{reg\_max}: максимальное значение регуляризации;\\
 ~~~--- \texttt{use\_dfl}: флаг использования Distribution Focal Loss (DFL);\\
-~~~--- \texttt{lambda\_inner}: весовой коэффициент, регулирующий вклад ошибки лиц.\\
-2. Определение функции \texttt{forward}(\texttt{pred\_dist}, \texttt{pred\_bboxes}, \texttt{anchor\_points},\\
-~~~~~~\texttt{target\_bboxes}, \texttt{target\_scores}, \texttt{target\_scores\_sum}, \texttt{fg\_mask}):\\
+~~~--- \texttt{lambda\_inner}: весовой коэффициент, регулирующий вклад ошибки локализации вложенного компонента (в~рассматриваемом случае~--- лица).\\
+2. Определение функции \texttt{forward}(\texttt{pred\_dist}, \texttt{pred\_bboxes}, \texttt{anchor\_points}, \texttt{target\_bboxes}, \texttt{target\_scores}, \texttt{target\_scores\_sum}, \texttt{fg\_mask}):\\
 ~~2.1. Расчет базовых весов для переднего плана:\\
 ~~~~~\texttt{weight} := сумма \texttt{target\_scores} по~последней оси, отфильтрованных \texttt{fg\_mask}.\\
 ~~2.2. Вычисление IoU и~основной потери для ограничивающих рамок:\\
@@ -197,10 +203,9 @@ $(x_{\text{center}},y_{\text{center}},w,h)$, нормированному
 ~~~~~\texttt{target\_ltrb} := преобразование \texttt{target\_bboxes} в~формат \{left, top, right, bottom\};\\
 ~~~~~\texttt{loss\_dfl} := средневзвешенная DFL-потеря(\texttt{pred\_dist}[\texttt{fg\_mask}], \texttt{target\_ltrb}[\texttt{fg\_mask}]).\\
 ~~~~~Иначе: \texttt{loss\_dfl} := 0.\\
-~~2.4. Расчет дополнительной ошибки для лиц:\\
-~~~~~\texttt{inner\_mask} := логическая маска объектов, соответствующих лицам (\texttt{target\_scores} > 0,5)\\
-~~~~~и~входящих в~область \texttt{fg\_mask};\\
-~~~~~если \texttt{inner\_mask} содержит объекты лиц:\\
+~~2.4. Расчет дополнительной ошибки для вложенного компонента:\\
+~~~~~\texttt{inner\_mask} := логическая маска объектов вложенного компонента (\texttt{target\_scores} > 0,5), входящих в~область \texttt{fg\_mask};\\
+~~~~~если \texttt{inner\_mask} содержит объекты:\\
 ~~~~~~~~\texttt{inner\_iou} := IoU(\texttt{pred\_bboxes}[\texttt{inner\_mask}], \texttt{target\_bboxes}[\texttt{inner\_mask}]);\\
 ~~~~~~~~\texttt{loss\_inner} := средневзвешенное значение $(1-\texttt{inner\_iou})$;\\
 ~~~~~иначе: \texttt{loss\_inner} := 0.\\
@@ -212,8 +217,7 @@ $(x_{\text{center}},y_{\text{center}},w,h)$, нормированному
 ~~3.2. Определить веса \texttt{weight.left}, \texttt{weight.right} для каждого граничного значения.\\
 ~~3.3. Вычислить DFL-потери как усредненную кросс-энтропию по~всем признакам.\\
 ~~3.4. Вернуть вычисленное значение DFL-потерь.\\
-\hline
-\end{tabular}
+\end{longtable}
 
 В~основе предложенного подхода лежит несколько ключевых этапов,
 включающих как процедуру инициализации гиперпараметров, так
