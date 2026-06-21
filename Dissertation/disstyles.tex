@@ -10,7 +10,7 @@
 %%% Интервалы %%%
 %% По ГОСТ Р 7.0.11-2011, пункту 5.3.6 требуется полуторный интервал
 %% Реализация средствами класса (на основе setspace) ближе к типографской классике.
-%% И правит сразу и в таблицах (если со звёздочкой)
+%% И правит сразу и в таблицах (если со звездочкой)
 %\DoubleSpacing*     % Двойной интервал
 \OnehalfSpacing*    % Полуторный интервал
 %\setSpacing{1.42}   % Полуторный интервал, подобный Ворду (возможно, стоит включать вместе с предыдущей строкой)
@@ -63,11 +63,11 @@
     \renewcommand\cftsectionaftersnum{.\space}       % добавляет точку с пробелом после номера подраздела в оглавлении
     \renewcommand\cftsubsectionaftersnum{.\space}    % добавляет точку с пробелом после номера подподраздела в оглавлении
     \renewcommand\cftsubsubsectionaftersnum{.\space} % добавляет точку с пробелом после номера подподподраздела в оглавлении
-    \AfterEndPreamble{% без этого polyglossia сама всё переопределяет
+    \AfterEndPreamble{% без этого polyglossia сама все переопределяет
         \setsecnumformat{\csname the#1\endcsname.\space}
     }
 }{%
-    \AfterEndPreamble{% без этого polyglossia сама всё переопределяет
+    \AfterEndPreamble{% без этого polyglossia сама все переопределяет
         \setsecnumformat{\csname the#1\endcsname\quad}
     }
 }
@@ -172,9 +172,9 @@
     \renewcommand*{\chaptitlefont}{\Large\bfseries}
 }{}
 
-%%% Счётчики %%%
+%%% Счетчики %%%
 
-%% Упрощённые настройки шаблона диссертации: нумерация формул, таблиц, рисунков
+%% Упрощенные настройки шаблона диссертации: нумерация формул, таблиц, рисунков
 \ifnumequal{\value{contnumeq}}{1}{%
     \counterwithout{equation}{chapter} % Убираем связанность номера формулы с номером главы/раздела
 }{}
@@ -186,7 +186,7 @@
 }{}
 
 \AfterEndPreamble{
-%% регистрируем счётчики в системе totcounter
+%% регистрируем счетчики в системе totcounter
     \regtotcounter{totalcount@figure}
     \regtotcounter{totalcount@table}       % Если иным способом поставить в преамбуле то ошибка в числе таблиц
     \regtotcounter{TotPages}               % Если иным способом поставить в преамбуле то ошибка в числе страниц
